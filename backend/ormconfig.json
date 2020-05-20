@@ -1,0 +1,14 @@
+{
+  "type":"postgres",
+  "host": "pgsql.rifaon.com.br",
+  "port" : 5432,
+  "username": "rifaon",
+  "password": "123456",
+  "database": "rifaon",
+  "migrations":[
+    "./src/database/migrations/*.ts"
+  ],
+  "cli": {
+    "migrationsDir":"./src/database/migrations"
+  }
+}
