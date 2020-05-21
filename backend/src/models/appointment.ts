@@ -1,8 +1,15 @@
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
+@Entity('appointments')
+class Appointment {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-class Appointment{
+  @Column()
+  provider: string;
 
+  @Column()
+  date: Date;
 }
-
 
 export default Appointment;
