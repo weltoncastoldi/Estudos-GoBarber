@@ -5,16 +5,16 @@ import Appointment from '../../models/appointment';
 import AppointmentRepository from '../../repositories/AppointmentsRepository';
 
 interface Request {
-  provider: string;
+  provider_id: string;
   date: Date;
 }
 
 class CreateAppointmentService {
-  public async execute({ date, provider }: Request): Promise<Appointment> {
+  public async execute({ date, provider_id }: Request): Promise<Appointment> {
     const appointmentRepository = getCustomRepository(AppointmentRepository);
     const appointmentDate = startOfHour(date);
 
-    const findAppointmentInSameDate = appointmentRepository.findBydate(
+    const findAppointmentInSameDate = await appointmentRepository.findBydate(
       appointmentDate,
     );
 
@@ -23,7 +23,7 @@ class CreateAppointmentService {
     }
 
     const appointment = appointmentRepository.create({
-      provider,
+      provider_id,
       date: appointmentDate,
     });
 

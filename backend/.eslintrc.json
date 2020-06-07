@@ -23,6 +23,8 @@
     "prettier"
   ],
   "rules": {
+    "@typescript-eslint/camelcase": "off",
+    "max-len": ["error", { "code": 110, "ignoreUrls": true }],
     "prettier/prettier": "error",
     "class-methods-use-this" : "off",
     "import/extensions":[

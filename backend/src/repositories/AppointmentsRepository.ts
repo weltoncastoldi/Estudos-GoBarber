@@ -1,7 +1,6 @@
-import { isEqual } from 'date-fns';
 import { EntityRepository, Repository } from 'typeorm';
 
-import Appointment from '../models/appointment';
+import Appointment from '../models/Appointment';
 
 @EntityRepository(Appointment)
 class AppointmentsRepository extends Repository<Appointment> {

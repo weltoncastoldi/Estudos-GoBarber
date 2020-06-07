@@ -8,5 +8,5 @@ const app = express();
 app.use(routes);
 
 app.listen(3333, () => {
-  console.log('asjdlkajdalsk');
+  console.log('Servidor executando localhos:3333');
 });
