@@ -1,31 +1,43 @@
 import { getRepository } from 'typeorm';
-import { hash } from 'bcryptjs';
+import { compare } from 'bcryptjs';
+import { sign } from 'jsonwebtoken';
+import User from '../../models/User';
+import authConfig from '../../config/auth.config';
 
 interface Request {
-  name: string;
   email: string;
   password: string;
 }
 
-class AuthenticateUserService {
-  public async execute({ email, password }: Request): Promise<User> {
-    // CRUD do orm pronto parausuario
-    const userRepository = getRepository(User);
-    const checkUserExiste = await userRepository.findOne({ where: { email } });
+interface Response {
+  user: User;
+  token: string;
+}
 
-    if (checkUserExiste) {
-      throw new Error('Email addres already used');
+class AuthenticateUserService {
+  public async execute({ email, password }: Request): Promise<Response> {
+    const userRepository = getRepository(User);
+
+    const user = await userRepository.findOne({ where: { email } });
+
+    if (!user) {
+      throw new Error('Email ou senha incorretos');
     }
 
-    const hashedPassword = await hash(password, 8);
-    const user = userRepository.create({
-      name,
-      email,
-      password: hashedPassword,
+    const passwordMatched = await compare(password, user.password);
+
+    if (!passwordMatched) {
+      throw new Error('Email ou senha incorretos');
+    }
+
+    const { secret, expiresIn } = authConfig.jwt;
+
+    const token = sign({}, secret, {
+      subject: user.id,
+      expiresIn,
     });
 
-    await userRepository.save(user);
-    return user;
+    return { user, token };
   }
 }
 
