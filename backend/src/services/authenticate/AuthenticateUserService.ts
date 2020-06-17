@@ -30,6 +30,7 @@ class AuthenticateUserService {
       throw new Error('Email ou senha incorretos');
     }
 
+    
     const { secret, expiresIn } = authConfig.jwt;
 
     const token = sign({}, secret, {

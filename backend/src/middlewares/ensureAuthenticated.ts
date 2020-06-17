@@ -13,6 +13,9 @@ export default function ensureAuthenticated(
   if (!authHeader) {
     throw new Error('JWT token is missing');
   }
+
+  // Bearer klsjdskaTOKEN
+  // Aqui é feita uma destruturação com isto a primeira posição não é necessária
   const [, token] = authHeader.split('');
 
   try {
@@ -20,6 +23,6 @@ export default function ensureAuthenticated(
     console.log(decoded);
     return next();
   } catch {
-    throw new Error('Invalid jwt format');
+    throw new Error('Invalid jwt Token');
   }
 }
