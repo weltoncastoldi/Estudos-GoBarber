@@ -1,10 +1,11 @@
 {
   "type":"postgres",
-  "host": "pgsql.rifaon.com.br",
+  "host": "pgsql.sorteei.com.br",
   "port" : 5432,
-  "username": "rifaon",
+  "username": "sorteei",
   "password": "123456",
-  "database": "rifaon",
+  "database": "sorteei",
+  "synchronize": true,
   "entities":[
     "./src/models/*.ts"
   ],
