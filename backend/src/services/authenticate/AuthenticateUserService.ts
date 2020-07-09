@@ -22,13 +22,13 @@ class AuthenticateUserService {
     const user = await userRepository.findOne({ where: { email } });
 
     if (!user) {
-      throw new AppError('Email ou senha incorretos', 401);
+      throw new AppError('Email ou senha incorretos', 406);
     }
 
     const passwordMatched = await compare(password, user.password);
 
     if (!passwordMatched) {
-      throw new AppError('Email ou senha incorretos', 401);
+      throw new AppError('Email ou senha incorretos', 406);
     }
 
     const { secret, expiresIn } = authConfig.jwt;

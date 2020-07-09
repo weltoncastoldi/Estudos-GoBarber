@@ -1,8 +1,9 @@
 import { startOfHour } from 'date-fns';
 import { getCustomRepository } from 'typeorm';
 
-import Appointment from '../../models/appointment';
+import Appointment from '../../models/Appointment';
 import AppointmentRepository from '../../repositories/AppointmentsRepository';
+import AppError from '../../errors/AppError';
 
 interface Request {
   provider_id: string;
@@ -19,7 +20,7 @@ class CreateAppointmentService {
     );
 
     if (findAppointmentInSameDate) {
-      throw Error('Agendamento nao encontrado');
+      throw new AppError('Agendamento nao encontrado', 406);
     }
 
     const appointment = appointmentRepository.create({
