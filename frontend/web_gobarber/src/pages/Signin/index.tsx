@@ -13,24 +13,30 @@ import Button from '../../components/Button';
 
 import { Container, Content, Background } from './styles';
 // #endregion
+interface IsingInFormData {
+  email: string;
+  password: string;
+}
 
 const SignIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const { signIn } = useContext(AuthContext);
 
   const handlerSubmit = useCallback(
-    async (data: object) => {
+    async (data: IsingInFormData) => {
       try {
         formRef.current?.setErrors({});
         const schema = Yup.object().shape({
-          name: Yup.string().required('Nome obrigatório'),
           email: Yup.string()
             .required('E-mail obrigatório')
             .email('E-mail inválido'),
           password: Yup.string().required('Senha obrigatório'),
         });
         await schema.validate(data, { abortEarly: false });
-        signIn();
+        signIn({
+          email: data.email,
+          password: data.password,
+        });
       } catch (err) {
         const erros = getValidationErrors(err);
         formRef.current?.setErrors(erros);
