@@ -1,4 +1,3 @@
-// #region IMPORTS
 import React, { useRef, useCallback, useContext } from 'react';
 import { FiLogIn, FiMail, FiLock } from 'react-icons/fi';
 import { FormHandles } from '@unform/core';
@@ -12,7 +11,7 @@ import Input from '../../components/Input';
 import Button from '../../components/Button';
 
 import { Container, Content, Background } from './styles';
-// #endregion
+
 interface IsingInFormData {
   email: string;
   password: string;
@@ -20,8 +19,8 @@ interface IsingInFormData {
 
 const SignIn: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
-  const { signIn } = useContext(AuthContext);
-
+  const { user, signIn } = useContext(AuthContext);
+  console.log(user);
   const handlerSubmit = useCallback(
     async (data: IsingInFormData) => {
       try {
