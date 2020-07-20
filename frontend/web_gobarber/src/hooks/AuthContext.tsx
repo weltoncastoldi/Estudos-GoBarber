@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useState } from 'react';
+import React, { createContext, useCallback, useState, useContext } from 'react';
 import api from '../services/api';
 
 interface IauthState {
@@ -12,6 +12,7 @@ interface IsingInCredentials {
 interface IauthContext {
   user: object;
   signIn(credentials: IsingInCredentials): Promise<void>;
+  signOut(): void;
 }
 
 const AuthContext = createContext<IauthContext>({} as IauthContext);
@@ -30,8 +31,6 @@ const AuthProvider: React.FC = ({ children }) => {
 
   const signIn = useCallback(async ({ email, password }) => {
     const response = await api.post('sessions', { email, password });
-    console.log(response.data);
-
     const { token, user } = response.data;
 
     localStorage.setItem('@Gobarber:token', token);
@@ -39,11 +38,28 @@ const AuthProvider: React.FC = ({ children }) => {
 
     setData({ token, user });
   }, []);
+
+  const signOut = useCallback(() => {
+    localStorage.removeItem('@Gobarber:token');
+    localStorage.removeItem('@Gobarber:user');
+    setData({} as IauthState);
+  }, []);
+
   return (
-    <AuthContext.Provider value={{ user: data.user, signIn }}>
+    <AuthContext.Provider value={{ user: data.user, signIn, signOut }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-export { AuthContext, AuthProvider };
+function useAuth(): IauthContext {
+  const context = useContext(AuthContext);
+
+  if (!context) {
+    throw new Error('useAhth must be used within an AuthProvider');
+  }
+
+  return context;
+}
+
+export { AuthProvider, useAuth };
