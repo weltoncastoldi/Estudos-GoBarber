@@ -23,30 +23,40 @@ interface IsignUpFormData {
 const SignUp: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const { addToast } = useToast();
+  const history = useHistory();
 
-  const handlerSubmit = useCallback(async (data: object) => {
-    try {
-      formRef.current?.setErrors({});
-      const schema = Yup.object().shape({
-        name: Yup.string().required('Nome não informado'),
-        email: Yup.string()
-          .required('E-mail obrigatório')
-          .email('E-mail inválido'),
-        password: Yup.string().min(6, 'No minimo 6 digitos'),
-      });
-      await schema.validate(data, { abortEarly: false });
-      await api.post('/users', data);
+  const handlerSubmit = useCallback(
+    async (data: object) => {
+      try {
+        formRef.current?.setErrors({});
+        const schema = Yup.object().shape({
+          name: Yup.string().required('Nome não informado'),
+          email: Yup.string()
+            .required('E-mail obrigatório')
+            .email('E-mail inválido'),
+          password: Yup.string().min(6, 'No minimo 6 digitos'),
+        });
+        await schema.validate(data, { abortEarly: false });
+        await api.post('/users', data);
+        history.push('/');
+        addToast({
+          type: 'success',
+          title: 'Cadastro realizado com sucessp',
+          description: 'Você já pode entrar em nossa plataforma',
+        });
+      } catch (err) {
+        const erros = getValidationErrors(err);
+        formRef.current?.setErrors(erros);
 
-      addToast({
-        type: 'success',
-        title: 'Cadastro realizado com sucessp',
-        description: 'Você já pode entrar em nossa plataforma',
-      });
-    } catch (err) {
-      const erros = getValidationErrors(err);
-      formRef.current?.setErrors(erros);
-    }
-  }, []);
+        addToast({
+          type: 'error',
+          title: 'Erro no cadastro',
+          description: 'Ocorreu um erro ao fazer cadastro, tente novamente',
+        });
+      }
+    },
+    [addToast, history],
+  );
 
   return (
     <Container>

@@ -2,17 +2,20 @@ import 'reflect-metadata';
 import express, { Response, Request, NextFunction } from 'express';
 import cors from 'cors';
 import 'express-async-errors';
+
+import uploadConfig from '@config/upload';
+import AppError from '@shared/errors/AppError';
 import routes from './routes';
-import './database/index';
-import uploadConfig from './config/upload';
-import AppError from './errors/AppError';
+
+import '@shared/infra/typeorm'; // Configuracao do TypeOrm
+import '@shared/container'; // Injeção de dependencias
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use('/files', express.static(uploadConfig.directory));
 app.use(routes);
-// colocando o _ posso criar uma regra no eslint para ele tratar como erro uma variavel nao usada, nesse caso \e obrigatorio usar o NextFunction
+
 app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
   // Verifica se existe uma instacia do AppError
   if (err instanceof AppError) {
@@ -21,8 +24,6 @@ app.use((err: Error, request: Request, response: Response, _: NextFunction) => {
       message: err.message,
     });
   }
-  console.error(err);
-
   return response.status(500).json({
     status: 'error',
     message: 'Internal server error',
