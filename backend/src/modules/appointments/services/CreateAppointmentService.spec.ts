@@ -17,5 +17,17 @@ describe('CreateAppointment', () => {
     expect(appointment.provider_id).toBe('1234556');
   });
 
-  it('should be not able to create two appointment on the same time', () => {});
+  it('should be not able to create two appointment on the same time', async () => {
+    const fakeAppointmentsRepository = new FakeAppointmentsRepository();
+    const createAppointment = new CreateAppointmentService(
+      fakeAppointmentsRepository,
+    );
+
+    const appointmentDate = new Date();
+
+    await createAppointment.execute({
+      date: appointmentDate,
+      provider_id: '123123',
+    });
+  });
 });
