@@ -3,7 +3,7 @@ import IAppointmentsRepository from '@modules/appointments/repositories/IAppoint
 import Appointment from '@modules/appointments/infra/typeorm/entities/Appointment';
 import ICreateAppointmentDTO from '@modules/appointments/dtos/ICreateAppointmentDTO';
 
-class AppointmentsRepository implements IAppointmentsRepository {
+class FakeAppointmentsRepository implements IAppointmentsRepository {
   private appointments: Appointment[] = [];
 
   public async create({
@@ -12,9 +12,11 @@ class AppointmentsRepository implements IAppointmentsRepository {
   }: ICreateAppointmentDTO): Promise<Appointment> {
     const appointment = new Appointment();
 
-    appointment.id = uuid();
-    appointment.date = date;
-    appointment.provider_id = provider_id;
+    Object.assign(appointment, { id: uuid(), date, provider_id });
+    // Subistituido pelo assign
+    // appointment.id = uuid();
+    // appointment.date = date;
+    // appointment.provider_id = provider_id;
 
     this.appointments.push(appointment);
     return appointment;
@@ -29,4 +31,4 @@ class AppointmentsRepository implements IAppointmentsRepository {
   }
 }
 
-export default AppointmentsRepository;
+export default FakeAppointmentsRepository;
