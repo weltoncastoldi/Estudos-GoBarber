@@ -1,4 +1,5 @@
 import FakeAppointmentsRepository from '@modules/appointments/repositories/fakes/FakeAppointmentRepository';
+import AppError from '@shared/errors/AppError';
 import CreateAppointmentService from './CreateAppointmentService';
 
 describe('CreateAppointment', () => {
@@ -23,11 +24,18 @@ describe('CreateAppointment', () => {
       fakeAppointmentsRepository,
     );
 
-    const appointmentDate = new Date();
+    const appointmentDate = new Date(2020, 7, 10, 11);
 
     await createAppointment.execute({
       date: appointmentDate,
       provider_id: '123123',
     });
+
+    expect(
+      createAppointment.execute({
+        date: appointmentDate,
+        provider_id: '123456',
+      }),
+    ).rejects.toBeInstanceOf(AppError);
   });
 });
