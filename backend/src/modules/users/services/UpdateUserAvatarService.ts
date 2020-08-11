@@ -24,6 +24,7 @@ class UpdateUserAvatarService {
 
   public async execute({ user_id, avatarFileName }: IRequest): Promise<User> {
     const user = await this.usersRepository.findById(user_id);
+
     if (!user) {
       throw new AppError('only authenticated users can chage avatar', 401);
     }

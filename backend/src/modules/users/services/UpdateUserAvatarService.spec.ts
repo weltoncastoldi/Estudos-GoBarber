@@ -29,17 +29,12 @@ describe('UpdateUserAvatar', () => {
 
   it('should be able to update avatar from non existing user', async () => {
     const fakeUsersRepository = new FakeUsersRepository();
-    const fakeStoraProvider = new FakeStorageProvider();
+    const fakeStorageProvider = new FakeStorageProvider();
 
     const updateUserAvatar = new UpdateUserAvatarService(
       fakeUsersRepository,
-      fakeStoraProvider,
+      fakeStorageProvider,
     );
-
-    await updateUserAvatar.execute({
-      user_id: 'usario-nao-exist',
-      avatarFileName: 'avatar.jpg',
-    });
 
     expect(
       updateUserAvatar.execute({
